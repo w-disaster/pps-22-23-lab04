@@ -10,6 +10,10 @@ enum List[E]:
 
 // a companion object (i.e., module) for List
 object List:
+  def empty[E]: List[E] = Nil()
+
+  def cons[E](h: E, t: List[E]): List[E] = Cons(h, t)
+
   def sum(l: List[Int]): Int = l match
     case Cons(h, t) => h + sum(t)
     case _ => 0
