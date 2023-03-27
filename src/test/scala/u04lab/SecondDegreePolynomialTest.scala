@@ -1,3 +1,5 @@
+package u04lab
+
 import org.junit.*
 import org.junit.Assert.*
 import u04lab.code.SecondDegreePolynomial
