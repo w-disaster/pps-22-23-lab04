@@ -4,7 +4,7 @@ import org.junit.*
 import org.junit.Assert.*
 import u04lab.code.SecondDegreePolynomial
 
-class SecondDegreePolynomialTest {
+class SecondDegreePolynomialTest:
 
   val simplePolynomial: SecondDegreePolynomial = SecondDegreePolynomial(1.0, 0, 3)
   val anotherPolynomial: SecondDegreePolynomial = SecondDegreePolynomial(0.0, 1, 0.0)
@@ -30,4 +30,3 @@ class SecondDegreePolynomialTest {
   @Test def testToString() =
     assertEquals(simplePolynomial.toString, "SecondDegreePolynomialImpl(1.0,0.0,3.0)")
 
-}
