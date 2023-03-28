@@ -8,7 +8,10 @@ trait Item {
 }
 
 object Item:
-  def apply(code: Int, name: String, tags: List[String] = List.empty): Item =
+  def apply(code: Int, name: String, tags: String*): Item =
+    ItemImpl(code, name, tags.foldRight(Nil())((h, t) => Cons(h, t)))
+
+  def apply(code: Int, name: String, tags: List[String]): Item =
     ItemImpl(code, name, tags)
 
 case class ItemImpl(override val code: Int,
@@ -83,7 +86,7 @@ case class WarehouseImpl(private var _items: List[Item]) extends Warehouse:
    *
    * @param item the item to remove
    */
-  override def remove(item: Item): Unit = _items = List.remove(_items)(i => i == item)
+  override def remove(item: Item): Unit = _items = filter(_items)(i => i != item)
 
   /**
    * Checks if the warehouse contains an item with the given code.

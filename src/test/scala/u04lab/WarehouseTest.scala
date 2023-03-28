@@ -8,6 +8,7 @@ class WarehouseTest:
 
   import u04lab.code.List.*
   import u04lab.code.Option.*
+  import u04lab.code.Option
 
   var warehouse: Warehouse = Warehouse()
 
@@ -35,4 +36,15 @@ class WarehouseTest:
     assertEquals(warehouse.retrieve(dellXps.code), Some(dellXps))
     warehouse.remove(dellXps) // side effect, remove dell xps from the warehouse
     assertEquals(warehouse.retrieve(dellXps.code), None())
+
+  @Test def testVariadicArg() =
+    val asusVivo: Item = Item(36, "Asus Vivobook S530U", "notebook", "linux")
+    warehouse.store(asusVivo)
+    val storedAsusVivo: Option[Item] = warehouse.retrieve(36)
+    assertEquals(storedAsusVivo, Some(asusVivo))
+    assertTrue(storedAsusVivo match
+      case Some(a) => a.tags == Cons("notebook", Cons("linux", Nil()))
+      case None() => false
+    )
+
 
