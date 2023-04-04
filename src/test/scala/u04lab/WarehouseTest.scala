@@ -38,12 +38,12 @@ class WarehouseTest:
     assertEquals(warehouse.retrieve(dellXps.code), None())
 
   @Test def testVariadicArg() =
-    val asusVivo: Item = Item(36, "Asus Vivobook S530U", "notebook", "linux")
+    val asusVivo: Item = Item(36, "Asus Vivobook S530U", "notebook", "GeForce MX130")
     warehouse.store(asusVivo)
     val storedAsusVivo: Option[Item] = warehouse.retrieve(36)
     assertEquals(storedAsusVivo, Some(asusVivo))
     assertTrue(storedAsusVivo match
-      case Some(a) => a.tags == Cons("notebook", Cons("linux", Nil()))
+      case Some(a) => a.tags == Cons("notebook", Cons("GeForce MX130", Nil()))
       case None() => false
     )
 
