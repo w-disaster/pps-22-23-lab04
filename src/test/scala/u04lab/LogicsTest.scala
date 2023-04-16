@@ -3,7 +3,7 @@ package u04lab
 import org.junit.Assert.{assertEquals, assertTrue}
 import org.junit.Test
 import u04lab.polyglot.{Logics, Pair}
-import u04lab.polyglot.a01b.LogicsImpl
+import u04lab.polyglot.LogicsImpl
 
 import java.util.Optional
 
@@ -22,6 +22,6 @@ class LogicsTest:
       emptyCells = logics.getEmptyCellsAsList(true)
     assertTrue(logics.isWon)
 
-  @Test def testLoose() =
+  @Test def testLose() =
     val mineCells: java.util.List[Pair[Integer, Integer]] = logics.getMineCellsAsList
     assertEquals(logics.hit(mineCells.get(0).getX, mineCells.get(0).getY), Optional.empty())

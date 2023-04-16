@@ -3,7 +3,7 @@ package u04lab
 import org.junit.*
 import org.junit.Assert.{assertEquals, assertTrue}
 import u04lab.polyglot.{OptionToOptional, Pair}
-import u04lab.polyglot.a01b.{World, WorldUtils}
+import u04lab.polyglot.{World, WorldUtils}
 import u04lab.code.Option.*
 
 import java.util.Optional
