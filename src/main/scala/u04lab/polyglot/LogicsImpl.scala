@@ -1,10 +1,10 @@
-package u04lab.polyglot.a01b
+package u04lab.polyglot
 import u04lab.code.Option
 import u04lab.code.Option.*
 import u04lab.code.List
 import u04lab.code.List.*
 import u04lab.code.*
-import u04lab.polyglot.{OptionToOptional, Pair}
+import u04lab.polyglot.{Logics, OptionToOptional, Pair}
 
 import java.util
 import java.util.Optional

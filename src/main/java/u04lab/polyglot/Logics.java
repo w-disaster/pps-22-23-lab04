@@ -1,4 +1,4 @@
-package u04lab.polyglot.a01b;
+package u04lab.polyglot;
 import u04lab.polyglot.Pair;
 
 import java.util.List;

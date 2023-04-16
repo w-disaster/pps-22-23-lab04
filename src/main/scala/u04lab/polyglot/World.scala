@@ -1,13 +1,13 @@
-package u04lab.polyglot.a01b
+package u04lab.polyglot
 
 import u04lab.code.List.{Cons, Nil, append, contains, map}
 import u04lab.code.{List, Option}
 import u04lab.code.Option.{None, Some}
-import u04lab.polyglot.a01b.Cell.{Empty, Mine}
+import u04lab.polyglot.Cell.{Empty, Mine}
 
 import scala.util.Random
 
-private enum Cell:
+enum Cell:
   case Mine(position: (Int, Int))
   case Empty(position: (Int, Int), o: Option[Int])
 

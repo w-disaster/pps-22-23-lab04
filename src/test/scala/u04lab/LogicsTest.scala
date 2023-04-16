@@ -2,8 +2,8 @@ package u04lab
 
 import org.junit.Assert.{assertEquals, assertTrue}
 import org.junit.Test
-import u04lab.polyglot.Pair
-import u04lab.polyglot.a01b.{Logics, LogicsImpl}
+import u04lab.polyglot.{Logics, Pair}
+import u04lab.polyglot.a01b.LogicsImpl
 
 import java.util.Optional
 
