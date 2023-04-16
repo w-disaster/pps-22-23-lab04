@@ -1,14 +1,11 @@
 package u04lab.polyglot.a01b
-import scala.jdk.javaapi.OptionConverters
-import u04lab.polyglot.{OptionToOptional}
 import u04lab.code.Option
 import u04lab.code.Option.*
 import u04lab.code.List
 import u04lab.code.List.*
 import u04lab.code.*
+import u04lab.polyglot.a01b.Cell
 import u04lab.polyglot.a01b.Cell.{Empty, Mine}
-import java.util
-import java.util.Arrays.asList
 import scala.annotation.tailrec
 import scala.util.Random
 
@@ -17,7 +14,7 @@ private enum Cell:
   case Empty(position: (Int, Int), o: Option[Int])
 
 trait World:
-  def getCells(): List[Cell]
+  def getCells: List[Cell]
   def disable(p: (Int, Int), v: Int): Unit
 
 object World:
@@ -46,14 +43,16 @@ object World:
 
   private def randomMines(mines: List[Cell], size: Int, n: Int): List[Cell] = n match
     case 0 => mines
-    case _ => ((r: (Int, Int)) => if contains(mines, Mine(r)) then
-      randomMines(mines, size, n)
-    else
-      randomMines(append(mines, Cons(Mine(r), Nil())), size, n - 1))
-      .apply((random.nextInt(size), random.nextInt(size)))
+    case _ =>
+      ((r: (Int, Int)) =>
+        if contains(mines, Mine(r)) then
+          randomMines(mines, size, n)
+        else
+          randomMines(append(mines, Cons(Mine(r), Nil())), size, n - 1))
+        .apply((random.nextInt(size), random.nextInt(size)))
 
   private class WorldImpl(private var cells: List[Cell]) extends World:
-    override def getCells(): List[Cell] = cells
+    override def getCells: List[Cell] = cells
 
     override def disable(p: (Int, Int), v: Int): Unit =
       cells = map(cells) {
@@ -67,7 +66,7 @@ class LogicsImpl(private val world: World) extends Logics:
   import Cell.*
 
   private def adjMines(p: (Int, Int)): List[Cell] =
-    filter(world.getCells()) {
+    filter(world.getCells) {
       case Mine((x, y)) => p match
         case (px, py) if px != x || py != y => p match
         case (px, py) => Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1
@@ -82,7 +81,7 @@ class LogicsImpl(private val world: World) extends Logics:
         stepOn(
           append(t,
             map(
-              filter(world.getCells()) {
+              filter(world.getCells) {
                 case Empty((x, y), None()) => Math.abs(hx - x) <= 1 && Math.abs(hy - y) <= 1 && (hx != x || hy != y)
                 case _ => false
               }
@@ -96,19 +95,16 @@ class LogicsImpl(private val world: World) extends Logics:
     case Nil() => {}
 
   def hit(x: Int, y: Int): java.util.Optional[Integer] =
-    find(world.getCells())({
-    case Empty((ex, ey), _) => ex == x && ey == y
-    case Mine((mx, my)) => mx == x && my == y
-  }) match
-    case Some(Mine(_)) => java.util.Optional.empty()
-    case Some(Empty(p @ (_, _), None())) =>
-      stepOn(Cons(p, Nil()))
-      java.util.Optional.of(length(adjMines(p)))
+    find(world.getCells) {
+      case Empty((px, py), _) => px == x && py == y
+      case Mine((px, py)) => px == x && py == y
+    } match
+      case Some(Mine(_)) => java.util.Optional.empty()
+      case Some(Empty(p @ (_, _), None())) =>
+        stepOn(Cons(p, Nil()))
+        java.util.Optional.of(length(adjMines(p)))
 
-  def won = length(filter(world.getCells()){
+  def won: Boolean = length(filter(world.getCells) {
     case Empty(_, None()) => true
     case _ => false
   }) == 0
-
-@main def main(): Unit =
-  val l:LogicsImpl = LogicsImpl(World(10, 4))

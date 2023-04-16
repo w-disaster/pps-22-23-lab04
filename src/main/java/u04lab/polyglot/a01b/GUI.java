@@ -1,6 +1,5 @@
 package u04lab.polyglot.a01b;
 
-import scala.Int;
 import u04lab.polyglot.Pair;
 
 import javax.swing.*;
@@ -75,19 +74,19 @@ public class GUI extends JFrame {
 
     private void quitGame() {
         this.drawBoard();
-        List<Pair<Integer, Integer>> bombCells = Utils.getMineCellsAsList(this.world.getCells());
+        List<Pair<Integer, Integer>> bombCells = CellsUtils.getMineCellsAsList(this.world.getCells());
         for (var entry : this.buttons.entrySet()) {
             if (entry.getKey().isEnabled() && bombCells.contains(entry.getValue())) {
                 entry.getKey().setText("*");
             }
+            entry.getKey().setEnabled(false);
         }
-        this.getContentPane().setEnabled(false);
     }
 
     private void drawBoard() {
         for (var entry : this.buttons.entrySet()) {
             List<Pair<Pair<Integer, Integer>, Optional<Integer>>> emptyCells =
-                    Utils.getEmptyCellsAsList(this.world.getCells(), false);
+                    CellsUtils.getEmptyCellsAsList(this.world.getCells(), false);
             if (emptyCells.stream().map(Pair::getX).toList()
                     .contains(entry.getValue())) {
 
@@ -97,12 +96,7 @@ public class GUI extends JFrame {
                         .findFirst()
                         .get();
 
-                if (optNumBombs.isPresent()) {
-                    int numBombs = optNumBombs.get();
-                    entry.getKey().setText(String.valueOf(numBombs));
-                } else {
-                    entry.getKey().setText("*");
-                }
+                entry.getKey().setText(optNumBombs.isPresent() ? String.valueOf(optNumBombs.get()) : "*");
                 entry.getKey().setEnabled(false);
             }
         }

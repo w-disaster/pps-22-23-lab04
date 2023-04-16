@@ -25,10 +25,11 @@ class WarehouseTest:
     assertTrue(warehouse.contains(dellXps.code))
 
   @Test def testSearchItems() =
+    warehouse.store(dellXps) // side effect, add dell xps to the warehouse
     warehouse.store(dellInspiron) // side effect, add dell inspiron to the warehouse
     warehouse.store(xiaomiMoped) // side effect, add xiaomi moped to the warehouse
     assertEquals(warehouse.searchItems("mobility"), Cons(xiaomiMoped, Nil()))
-    assertEquals(warehouse.searchItems("notebook"),  Cons(dellXps, Cons(dellInspiron, Nil())))
+    assertEquals(warehouse.searchItems("notebook"), Cons(dellXps, Cons(dellInspiron, Nil())))
 
   @Test def testRetreive() =
     warehouse.store(dellXps) // side effect, add dell xps to the warehouse
