@@ -1,10 +1,10 @@
-package u04lab.polyglot
-import u04lab.code.List
+package u04lab.polyglot.utils
+
 import u04lab.code.List.*
-import u04lab.code.Option
+import u04lab.code.{List, Option}
 import u04lab.code.Option.*
-import u04lab.polyglot.World
-import Cell.*
+import u04lab.polyglot.Cell.{Empty, Mine}
+import u04lab.polyglot.{Cell, Pair, World}
 
 object WorldUtils:
 

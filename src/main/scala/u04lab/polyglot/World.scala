@@ -12,7 +12,7 @@ enum Cell:
   case Empty(position: (Int, Int), o: Option[Int])
 
 trait World:
-  def getCells: List[Cell]
+  def cells: List[Cell]
   def disable(p: (Int, Int), v: Int): Unit
 
 object World:
@@ -49,11 +49,11 @@ object World:
           randomMines(append(mines, Cons(Mine(r), Nil())), size, n - 1))
         .apply((random.nextInt(size), random.nextInt(size)))
 
-  private class WorldImpl(private var cells: List[Cell]) extends World:
-    override def getCells: List[Cell] = cells
+  private class WorldImpl(private var _cells: List[Cell]) extends World:
+    override def cells: List[Cell] = _cells
 
     override def disable(p: (Int, Int), v: Int): Unit =
-      cells = map(cells) {
+      _cells = map(_cells) {
         case Empty(p1, None()) if p == p1 => Empty(p1, Some(v))
         case e @ Empty(_, _) => e
         case e @ Mine(_) => e

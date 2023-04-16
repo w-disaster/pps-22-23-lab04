@@ -4,7 +4,8 @@ import u04lab.code.Option.*
 import u04lab.code.List
 import u04lab.code.List.*
 import u04lab.code.*
-import u04lab.polyglot.{Logics, OptionToOptional, Pair}
+import u04lab.polyglot.utils.{OptionToOptional, WorldUtils}
+import u04lab.polyglot.{Logics, Pair}
 
 import java.util
 import java.util.Optional
@@ -17,7 +18,7 @@ class LogicsImpl(size: Int, mines: Int) extends Logics:
   private val world : World = World(size, mines)
 
   private def adjMines(p: (Int, Int)): List[Cell] =
-    filter(world.getCells) {
+    filter(world.cells) {
       case Mine((x, y)) => p match
         case (px, py) if px != x || py != y => p match
         case (px, py) => Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1
@@ -32,7 +33,7 @@ class LogicsImpl(size: Int, mines: Int) extends Logics:
         stepOn(
           append(t,
             map(
-              filter(world.getCells) {
+              filter(world.cells) {
                 case Empty((x, y), None()) => Math.abs(hx - x) <= 1 && Math.abs(hy - y) <= 1 && (hx != x || hy != y)
                 case _ => false
               }
@@ -47,13 +48,13 @@ class LogicsImpl(size: Int, mines: Int) extends Logics:
 
 
   override def getMineCellsAsList: util.List[Pair[Integer, Integer]] =
-    WorldUtils.filterMapMineCells(world.getCells)
+    WorldUtils.filterMapMineCells(world.cells)
 
   override def getEmptyCellsAsList(enabled: Boolean): util.List[Pair[Pair[Integer, Integer], Optional[Integer]]] =
-    WorldUtils.filterMapEmptyCells(world.getCells, enabled)
+    WorldUtils.filterMapEmptyCells(world.cells, enabled)
 
   override def hit(x: Int, y: Int): java.util.Optional[Integer] =
-    find(world.getCells) {
+    find(world.cells) {
       case Empty((px, py), _) => px == x && py == y
       case Mine((px, py)) => px == x && py == y
     } match
@@ -62,7 +63,7 @@ class LogicsImpl(size: Int, mines: Int) extends Logics:
         stepOn(Cons(p, Nil()))
         OptionToOptional(Some(length(adjMines(p))))
 
-  override def isWon: Boolean = length(filter(world.getCells) {
+  override def isWon: Boolean = length(filter(world.cells) {
     case Empty(_, None()) => true
     case _ => false
   }) == 0

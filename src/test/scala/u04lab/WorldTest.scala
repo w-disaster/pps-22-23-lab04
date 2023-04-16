@@ -2,9 +2,10 @@ package u04lab
 
 import org.junit.*
 import org.junit.Assert.{assertEquals, assertTrue}
-import u04lab.polyglot.{OptionToOptional, Pair}
-import u04lab.polyglot.{World, WorldUtils}
+import u04lab.polyglot.Pair
+import u04lab.polyglot.World
 import u04lab.code.Option.*
+import u04lab.polyglot.utils.{OptionToOptional, WorldUtils}
 
 import java.util.Optional
 
