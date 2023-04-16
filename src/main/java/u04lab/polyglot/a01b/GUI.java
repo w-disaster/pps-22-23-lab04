@@ -17,11 +17,9 @@ public class GUI extends JFrame {
     private static final long serialVersionUID = -6218820567019985015L;
     private final Map<JButton, Pair<Integer,Integer>> buttons = new HashMap<>();
     private final Logics logics;
-    private final World world;
 
     public GUI(int size, int mines) {
-        this.world = World.apply(size, mines);
-        this.logics = new LogicsImpl(this.world);
+        this.logics = new LogicsImpl(size, mines);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(100 * size, 100 * size);
 
@@ -32,15 +30,15 @@ public class GUI extends JFrame {
             final JButton bt = (JButton) e.getSource();
             final Pair<Integer,Integer> pos = buttons.get(bt);
             // call the logic here to tell it that cell at 'pos' has been selected
-            Optional<Integer> aMineWasFound = logics.hit(pos.getX(), pos.getY());
-            if (aMineWasFound.isEmpty()) {
+            Optional<Integer> adjMines = logics.hit(pos.getX(), pos.getY());
+            if (adjMines.isEmpty()) {
                 quitGame();
                 JOptionPane.showMessageDialog(this, "You lost!!");
             } else {
                 drawBoard();
             }
-            boolean isThereVictory = this.logics.won(); // call the logic here to ask if there is victory
-            if (isThereVictory){
+            boolean won = this.logics.isWon(); // call the logic here to ask if there is victory
+            if (won){
                 quitGame();
                 JOptionPane.showMessageDialog(this, "You won!!");
                 System.exit(0);
@@ -59,8 +57,8 @@ public class GUI extends JFrame {
             }
         };
 
-        for (int i=0; i<size; i++){
-            for (int j=0; j<size; j++){
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
                 final JButton jb = new JButton(" ");
                 jb.addActionListener(onClick);
                 jb.addMouseListener(onRightClick);
@@ -74,7 +72,7 @@ public class GUI extends JFrame {
 
     private void quitGame() {
         this.drawBoard();
-        List<Pair<Integer, Integer>> bombCells = CellsUtils.getMineCellsAsList(this.world.getCells());
+        List<Pair<Integer, Integer>> bombCells = this.logics.getMineCellsAsList();
         for (var entry : this.buttons.entrySet()) {
             if (entry.getKey().isEnabled() && bombCells.contains(entry.getValue())) {
                 entry.getKey().setText("*");
@@ -86,7 +84,7 @@ public class GUI extends JFrame {
     private void drawBoard() {
         for (var entry : this.buttons.entrySet()) {
             List<Pair<Pair<Integer, Integer>, Optional<Integer>>> emptyCells =
-                    CellsUtils.getEmptyCellsAsList(this.world.getCells(), false);
+                    this.logics.getEmptyCellsAsList(false);
             if (emptyCells.stream().map(Pair::getX).toList()
                     .contains(entry.getValue())) {
 

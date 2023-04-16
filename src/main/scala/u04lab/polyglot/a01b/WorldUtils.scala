@@ -5,17 +5,17 @@ import u04lab.code.Option.*
 import u04lab.polyglot.a01b.Cell.{Empty, Mine}
 import u04lab.polyglot.Pair
 
-object CellsUtils:
+object WorldUtils:
 
-  def getMineCellsAsList(cells: List[Cell]): java.util.List[Pair[Integer, Integer]] = cells match
+  def filterMapMineCells(cells: List[Cell]): java.util.List[Pair[Integer, Integer]] = cells match
     case Cons(h, t) => h match
       case Mine((x, y)) => java.util.stream.Stream
-        .concat(java.util.stream.Stream.of(Pair(Int.box(x), Int.box(y))), getMineCellsAsList(t).stream())
+        .concat(java.util.stream.Stream.of(Pair(Int.box(x), Int.box(y))), filterMapMineCells(t).stream())
         .toList
       case _ => java.util.List.of()
     case Nil() => java.util.List.of()
 
-  def getEmptyCellsAsList(cells: List[Cell], enabled: Boolean): 
+  def filterMapEmptyCells(cells: List[Cell], enabled: Boolean):
   java.util.List[Pair[Pair[Integer, Integer], java.util.Optional[Integer]]] = cells match
     case Cons(h, t) => h match
       case Empty((x, y), o) => o match
@@ -25,7 +25,7 @@ object CellsUtils:
                 java.util.stream.Stream.of(
                   Pair(Pair(Int.box(x), Int.box(y)), java.util.Optional.of(Int.box(a)))
                 ),
-                getEmptyCellsAsList(t, enabled).stream()
+                filterMapEmptyCells(t, enabled).stream()
               )
             .toList
           case None() if enabled =>
@@ -34,9 +34,9 @@ object CellsUtils:
                 java.util.stream.Stream.of(
                   Pair(Pair(Int.box(x), Int.box(y)), java.util.Optional.empty())
                 ),
-                getEmptyCellsAsList(t, enabled).stream()
+                filterMapEmptyCells(t, enabled).stream()
               )
             .toList
-          case _ => getEmptyCellsAsList(t, enabled)
-      case _ => getEmptyCellsAsList(t, enabled)
+          case _ => filterMapEmptyCells(t, enabled)
+      case _ => filterMapEmptyCells(t, enabled)
     case Nil() => java.util.List.of()

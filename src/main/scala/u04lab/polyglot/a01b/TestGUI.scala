@@ -1,3 +1,3 @@
 package u04lab.polyglot.a01b
 
-@main def startGui(): Unit = new GUI(4, 4)
+@main def startGUI(): Unit = new GUI(4, 4)
